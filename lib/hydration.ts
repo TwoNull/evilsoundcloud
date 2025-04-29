@@ -1,5 +1,6 @@
 import { Playlist, Track } from "./types";
 
+// TODO: Fetch/cache this in the event of a web app update
 const WEB_CLIENTID = "JtwkMxXKQNqDFvsQ3pUayFVgt4j9dS87"
 
 export async function getPlaylistURL(track: string, authorization: string): Promise<string | null> {

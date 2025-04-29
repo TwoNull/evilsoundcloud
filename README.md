@@ -1,3 +1,3 @@
 # EvilSoundcloud
 
-A next.js application for ripping Soundcloud Tracks/Albums/Playlists and streaming/assembling them client-side, saving on server resources
+A Next.js application for ripping Soundcloud Tracks/Albums/Playlists and streaming/assembling them client-side, saving on server resources
