@@ -171,9 +171,3 @@ export interface Badges {
     pro_unlimited: boolean
     verified: boolean
 }
-  
-export interface Stream {
-    name: string
-    url: string
-    bitrate: string
-}
