@@ -45,7 +45,7 @@ export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
         <Card className="shadow-md w-full max-w-screen-md">
             <CardContent className="flex justify-between items-center gap-4 ">
                 <div>
-                    <Image src={props.set.artwork_url} alt="" width={64} height={64} />
+                    <Image src={props.set.tracks[0].artwork_url} alt="" width={64} height={64} />
                 </div>
                 <div className="flex-1 space-y-1">
                     <h3 className="text-md font-semibold">{props.set.title}</h3>
@@ -54,7 +54,7 @@ export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
                 {archiveUrl === "" ? <Progress value={33} /> : <a download={props.set.title + ".zip"} href={archiveUrl}>Download</a>}
             </CardContent>
             <CardContent className="flex flex-col justify-left items-center gap-2">
-                {trackUrls.length === 0 ? <Progress value={33} /> : trackUrls.map((url: string, i: number) => <a download={props.set.tracks[i].title + ".mp3"} href={url}>{props.set.tracks[i].title}</a>)}
+                {trackUrls.length === 0 ? <Progress value={33} /> : trackUrls.map((url: string, i: number) => <a key={i} download={props.set.tracks[i].title + ".mp3"} href={url}>{props.set.tracks[i].title}</a>)}
             </CardContent>
         </Card>
   )

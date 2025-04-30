@@ -36,11 +36,13 @@ export async function assembleTrack(playlistURL: string, track: Track, set?: Set
         description: "",
         data: await artworkResponse.arrayBuffer()
     })
-    const releaseDate = new Date(track.release_date)
-    writer.setFrame("TYER", releaseDate.getFullYear())
-    const day = String(releaseDate.getDate()).padStart(2, '0')
-    const month = String(releaseDate.getMonth() + 1).padStart(2, '0')
-    writer.setFrame('TDAT', `${day}${month}`)
+    if (track.release_date) {
+        const releaseDate = new Date(track.release_date)
+        writer.setFrame("TYER", releaseDate.getFullYear())
+        const day = String(releaseDate.getDate()).padStart(2, '0')
+        const month = String(releaseDate.getMonth() + 1).padStart(2, '0')
+        writer.setFrame('TDAT', `${day}${month}`)
+    }
 
     return writer.addTag()
 }

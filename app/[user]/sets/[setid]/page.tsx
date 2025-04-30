@@ -15,12 +15,16 @@ export default async function SetPage({params}: any) {
             let streamUrl: string = ""
             for (const t in sdata.tracks[s].media.transcodings) {
                 if (sdata.tracks[s].media.transcodings[t].format.protocol === "hls") {
-                    if (sdata.tracks[s].media.transcodings[t].preset === "mp3_1_0") {
+                    if (sdata.tracks[s].media.transcodings[t].preset.substring(0,3) === "mp3") {
                         streamUrl = sdata.tracks[s].media.transcodings[t].url
                     }
                 }
             }
-            playlistURLs.push(getPlaylistURL(streamUrl, sdata.tracks[s].track_authorization))
+            if (streamUrl != "") {
+                playlistURLs.push(getPlaylistURL(streamUrl, sdata.tracks[s].track_authorization))
+            } else {
+                console.log(sdata.tracks[s])
+            }
         }
         const resolved = await Promise.all(playlistURLs)
         if (resolved.indexOf("") === -1) {
