@@ -1,4 +1,4 @@
-export interface Playlist {
+export interface Set {
     artwork_url: string
     created_at: string
     description: string

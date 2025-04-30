@@ -4,36 +4,22 @@ import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 import { Track } from "@/lib/types"
 import { useState, useEffect } from "react"
-import { addSegmentData, getPlaylistSegments } from "@/lib/hls"
 import { Progress } from "./ui/progress"
+import { assembleTrack } from "@/lib/assemble"
 
 
 export default function TrackCard(props: {track: Track, playlistURL: string}) {
     const [trackUrl, setTrackUrl] = useState("")
 
-    async function assembleTrack() {
-        const segURLs = await getPlaylistSegments(props.playlistURL)
-
-        const audioBuffers: Promise<ArrayBuffer>[] = []
-        console.log(segURLs)
-        for (const s in segURLs) {
-            audioBuffers.push(addSegmentData(segURLs[s]))
-        }
-        const resolved = await Promise.all(audioBuffers)
-        const totalLength = resolved.reduce((acc, buf) => acc + buf.byteLength, 0)
-        const result = new Uint8Array(totalLength)
-        let offset = 0;
-        for (const buf of resolved) {
-            result.set(new Uint8Array(buf), offset)
-            offset += buf.byteLength
-        }
+    async function addTrack() {
+        const result = await assembleTrack(props.playlistURL, props.track)
 
         const blob = new Blob([result], { type: 'audio/mpeg' })
         setTrackUrl(URL.createObjectURL(blob))
     }
 
     useEffect(() => {
-        assembleTrack()
+        addTrack()
     }, [])
     
 

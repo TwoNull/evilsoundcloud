@@ -1,9 +1,9 @@
-import { Playlist, Track } from "./types";
+import { Set, Track } from "./types";
 
 // TODO: Fetch/cache this in the event of a web app update
 const WEB_CLIENTID = "JtwkMxXKQNqDFvsQ3pUayFVgt4j9dS87"
 
-export async function getPlaylistURL(track: string, authorization: string): Promise<string | null> {
+export async function getPlaylistURL(track: string, authorization: string): Promise<string> {
     try {
         const response = await (await fetch(`${track}?client_id=${WEB_CLIENTID}&track_authorization=${authorization}`, {
             headers: {
@@ -22,11 +22,47 @@ export async function getPlaylistURL(track: string, authorization: string): Prom
                 'origin': 'https://soundcloud.com'
             },
         })).json()
-        console.log(response)
         return response.url
-    } catch {
-        return null
+    } catch (error) {
+        console.log('error fetching or parsing playlist URL:', error)
+        return ""
     }
+}
+
+export async function populateTracks(set: Set): Promise<Set> {
+    const indices: number[] = []
+    let ids = ""
+    for (let s = 0; s < set.tracks.length; s++) {
+        if (set.tracks[s].media === undefined) {
+            indices.push(s)
+            ids += set.tracks[s].id + ","
+        }
+    }
+    try {
+        const response = await (await fetch(`https://api-v2.soundcloud.com/tracks?ids=${ids.substring(0, ids.length-1)}&client_id=${WEB_CLIENTID}`, {
+            headers: {
+                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'accept-language': 'en-US,en;q=0.9',
+                'priority': 'u=0, i',
+                'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"macOS"',
+                'sec-fetch-dest': 'document',
+                'sec-fetch-mode': 'navigate',
+                'sec-fetch-site': 'none',
+                'sec-fetch-user': '?1',
+                'upgrade-insecure-requests': '1',
+                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+                'origin': 'https://soundcloud.com'
+            },
+        })).json()
+        for (let i = 0; i < response.length; i++) {
+            set.tracks[indices[i]] = response[i]
+        }
+    } catch (error) {
+        console.log('error fetching set track data:', error)
+    }
+    return set
 }
 
 export async function getTrackData(url: string): Promise<Track | null> {
@@ -72,12 +108,12 @@ export async function getTrackData(url: string): Promise<Track | null> {
         return track
 
     } catch (error) {
-        console.log('error fetching or parsing hydration data:', error)
+        console.log('error fetching or parsing track data:', error)
         return null
     }
 }
 
-export async function getPlaylistData(url: string): Promise<Playlist | null> {
+export async function getSetData(url: string): Promise<Set | null> {
     try {
         const response = await fetch(url, {
             headers: {
@@ -115,11 +151,11 @@ export async function getPlaylistData(url: string): Promise<Playlist | null> {
         const substr = html.substring(jsonStart, endIndex)
         const hydratables = JSON.parse(`[${substr}]`)
 
-        const playlist: Playlist = hydratables[hydratables.length].data
+        const set: Set = hydratables[hydratables.length-1].data
 
-        return playlist
+        return set
     } catch (error) {
-        console.log('error fetching or parsing hydration data:', error)
+        console.log('error fetching or parsing set data:', error)
         return null
     }
 }

@@ -30,13 +30,13 @@ export async function getPlaylistSegments(url: string): Promise<string[]> {
         }
         
         return segmentUrls
-    } catch (e) {
-        console.log(e)
+    } catch (error) {
+        console.log('error fetching or parsing playlist segments:', error)
         return segURLs
     }
 }
 
-export async function addSegmentData(url: string): Promise<ArrayBuffer> {
+export async function getSegmentData(url: string): Promise<ArrayBuffer> {
     try {
         const response = await fetch(url, {
             headers: {
@@ -54,8 +54,8 @@ export async function addSegmentData(url: string): Promise<ArrayBuffer> {
         })
         return await response.arrayBuffer()
     }
-    catch (e) {
-        console.log(e)
+    catch (error) {
+        console.log('error fetching or parsing segment data:', error)
         return new ArrayBuffer(0)
     }
 }

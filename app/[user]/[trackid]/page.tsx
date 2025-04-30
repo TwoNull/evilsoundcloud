@@ -2,7 +2,7 @@
 
 import LinkForm from "@/components/linkform"
 import TrackCard from "@/components/trackcard"
-import { getPlaylistURL, getTrackData } from "@/lib/hydration"
+import { getPlaylistURL, getTrackData } from "@/lib/serverreq"
 
 export default async function TrackPage({params}: any) {
     const { user, trackid } = await params
@@ -18,7 +18,7 @@ export default async function TrackPage({params}: any) {
             }
         }
         const playlistURL = await getPlaylistURL(streamUrl, tdata.track_authorization)
-        if (playlistURL != null) {
+        if (playlistURL != "") {
             return (
                 <div className="flex flex-col items-center p-4 gap-4">
                     <LinkForm />
