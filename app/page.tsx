@@ -1,6 +1,7 @@
 import LinkForm from "@/components/linkform";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link";
 
 export default function Home() {
     return (
@@ -9,7 +10,7 @@ export default function Home() {
             <Card className="w-full max-w-screen-md">
                 <CardHeader>
                     <CardTitle>What is this?</CardTitle>
-                    <CardDescription>EvilSoundCloud is a web app for ripping tracks, albums, and playlists from SoundCloud. All music is streamed and assembled in your browser rather than on an external server.</CardDescription>
+                    <CardDescription>EvilSoundCloud is a web app for ripping tracks, albums, and playlists from SoundCloud. All music is streamed and assembled in your browser rather than on an external server. You can check the project out on <Link className="text-blue-900 hover:underline" href="https://github.com/twonull/evilsoundcloud" target="_blank" rel="noopener noreferrer">GitHub</Link>.</CardDescription>
                     <br />
                     <CardTitle>Usage</CardTitle>
                     <CardDescription>For a single track, copy its url. It will look something like:</CardDescription>
