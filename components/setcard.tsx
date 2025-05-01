@@ -7,6 +7,9 @@ import { useState, useEffect } from "react"
 import { Progress } from "./ui/progress"
 import { assembleTrack } from "@/lib/assemble"
 import JSZip from "jszip"
+import { Table, TableBody, TableCell, TableRow } from "./ui/table"
+import { Download, Loader2 } from "lucide-react"
+import { Button } from "./ui/button"
 
 
 export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
@@ -42,19 +45,50 @@ export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
     
 
     return (
-        <Card className="shadow-md w-full max-w-screen-md">
-            <CardContent className="flex justify-between items-center gap-4 ">
-                <div>
-                    <Image src={props.set.tracks[0].artwork_url} alt="" width={64} height={64} />
-                </div>
-                <div className="flex-1 space-y-1">
-                    <h3 className="text-md font-semibold">{props.set.title}</h3>
-                    <p className="text-xs text-muted-foreground">{props.set.user.username}</p>
-                </div>
-                {archiveUrl === "" ? <Progress value={33} /> : <a download={props.set.title + ".zip"} href={archiveUrl}>Download</a>}
-            </CardContent>
-            <CardContent className="flex flex-col justify-left items-center gap-2">
-                {trackUrls.length === 0 ? <Progress value={33} /> : trackUrls.map((url: string, i: number) => <a key={i} download={props.set.tracks[i].title + ".mp3"} href={url}>{props.set.tracks[i].title}</a>)}
+        <Card className="shadow-md w-full max-w-screen-md gap-0 p-0">
+            <Card className="shadow-md w-full">
+                <CardContent className="flex justify-between items-center gap-4 ">
+                    <div>
+                        <Image src={props.set.tracks[0].artwork_url} alt="" width={64} height={64} />
+                    </div>
+                    <div className="flex-1 space-y-1">
+                        <h3 className="text-md font-semibold">{props.set.title}</h3>
+                        <p className="text-xs text-muted-foreground">{props.set.user.username}</p>
+                    </div>
+                    {archiveUrl === "" ? <Loader2 /> : <Button className="text-xs" asChild><a download={props.set.title + ".zip"} href={archiveUrl}><Download />.zip</a></Button>}
+                </CardContent>
+            </Card>
+            <CardContent className="flex flex-col justify-left items-left gap-2 p-2 px-4">
+                {
+                    trackUrls.length === 0 ? <Progress value={33} /> 
+                :
+                    <Table>
+                        <TableBody>
+                            {
+                                trackUrls.map((url: string, i: number) => {
+                                    const total = Math.floor(props.set.tracks[i].duration / 1000);
+                                    const minutes = Math.floor(total / 60);
+                                    const seconds = total % 60;
+                                    return(
+                                        <TableRow className="text-md" key={i}>
+                                            <TableCell className="font-light">{i+1}</TableCell>
+                                            <TableCell>{props.set.tracks[i].title}</TableCell>
+                                            <TableCell className="font-light">{`${minutes}:${seconds.toString().padStart(2, '0')}`}</TableCell>
+                                            <TableCell align="right">
+                                                <Button size="sm" className="text-xs" asChild>
+                                                    <a download={props.set.tracks[i].title + ".mp3"} href={url}>
+                                                        <Download/>
+                                                        .mp3
+                                                    </a>
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                }
             </CardContent>
         </Card>
   )

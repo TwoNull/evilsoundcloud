@@ -6,7 +6,8 @@ import { Track } from "@/lib/types"
 import { useState, useEffect } from "react"
 import { Progress } from "./ui/progress"
 import { assembleTrack } from "@/lib/assemble"
-
+import { Download, Loader2 } from "lucide-react"
+import { Button } from "./ui/button"
 
 export default function TrackCard(props: {track: Track, playlistURL: string}) {
     const [trackUrl, setTrackUrl] = useState("")
@@ -33,7 +34,7 @@ export default function TrackCard(props: {track: Track, playlistURL: string}) {
                     <h3 className="text-md font-semibold">{props.track.title}</h3>
                     <p className="text-xs text-muted-foreground">{props.track.publisher_metadata.artist}</p>
                 </div>
-                {trackUrl === "" ? <Progress value={33} /> : <a download={props.track.title + ".mp3"} href={trackUrl}>Download</a>}
+                {trackUrl === "" ? <Loader2 /> : <Button className="text-xs" asChild><a download={props.track.title + ".mp3"} href={trackUrl}><Download />.mp3</a></Button>}
             </CardContent>
         </Card>
   )
