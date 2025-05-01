@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Evil Soundcloud",
-    description: "Soundcloud Browsing and Downloading Client",
+    title: "EvilSoundCloud",
+    description: "A Web App for Ripping SoundCloud Tracks",
 };
 
 export default function RootLayout({

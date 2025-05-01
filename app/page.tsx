@@ -9,7 +9,7 @@ export default function Home() {
             <Card className="w-full max-w-screen-md">
                 <CardHeader>
                     <CardTitle>What is this?</CardTitle>
-                    <CardDescription>EvilSoundcloud is a web app for ripping tracks, albums, and playlists from SoundCloud. All music is streamed and assembled in your browser rather than on an external server.</CardDescription>
+                    <CardDescription>EvilSoundCloud is a web app for ripping tracks, albums, and playlists from SoundCloud. All music is streamed and assembled in your browser rather than on an external server.</CardDescription>
                     <br />
                     <CardTitle>Usage</CardTitle>
                     <CardDescription>For a single track, copy its url. It will look something like:</CardDescription>

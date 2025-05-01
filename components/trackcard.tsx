@@ -31,7 +31,7 @@ export default function TrackCard(props: {track: Track, playlistURL: string}) {
                 </div>
                 <div className="flex-1 space-y-1">
                     <h3 className="text-md font-semibold">{props.track.title}</h3>
-                    <p className="text-xs text-muted-foreground">{props.track.publisher_metadata.artist}</p>
+                    <p className="text-xs text-muted-foreground">{props.track.user.username} - Track - {`${Math.floor(Math.floor(props.track.duration/1000)/60)}:${(Math.floor(props.track.duration/1000)%60).toString().padStart(2,'0')}`}</p>
                 </div>
                 {trackData.url === "" ? <Loader2 /> : 
                     <div className="flex flex-col items-center gap-1">

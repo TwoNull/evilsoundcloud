@@ -53,7 +53,7 @@ export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
                     </div>
                     <div className="flex-1 space-y-1">
                         <h3 className="text-md font-semibold">{props.set.title}</h3>
-                        <p className="text-xs text-muted-foreground">{props.set.user.username}</p>
+                        <p className="text-xs text-muted-foreground">{props.set.user.username} - {props.set.is_album ? "Album" : "Playlist"}</p>
                     </div>
                     {archiveData.url === "" ? <Loader2 /> :
                         <div className="flex flex-col items-center gap-1">

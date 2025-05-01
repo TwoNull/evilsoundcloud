@@ -57,7 +57,7 @@ export default function LinkForm() {
                 <FormField
                     control={form.control}
                     rules={{
-                        validate: (value) => isValidURL(value) || 'Invalid Soundcloud URL',
+                        validate: (value) => isValidURL(value) || 'Invalid SoundCloud URL',
                     }}
                     name="link"
                     defaultValue=""
@@ -67,7 +67,7 @@ export default function LinkForm() {
                                 <Input placeholder="https://soundcloud.com/jxxyy/gout" {...field} />
                             </FormControl>
                             <FormMessage className="text-xs">
-                                <span className="text-foreground">Enter a Soundcloud Track/Album/Playlist URL</span>
+                                <span className="text-foreground">Enter a SoundCloud Track/Album/Playlist URL</span>
                             </FormMessage>
                         </FormItem>
                     )}
