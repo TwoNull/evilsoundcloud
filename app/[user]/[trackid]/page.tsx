@@ -2,7 +2,9 @@
 
 import LinkForm from "@/components/linkform"
 import TrackCard from "@/components/trackcard"
+import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { getPlaylistURL, getTrackData } from "@/lib/serverreq"
+import { TriangleAlert } from "lucide-react"
 
 export default async function TrackPage({params}: any) {
     const { user, trackid } = await params
@@ -31,6 +33,16 @@ export default async function TrackPage({params}: any) {
     return (
         <div className="flex flex-col items-center p-4 gap-4">
             <LinkForm />
+            <Card className="shadow-md w-full max-w-screen-md">
+                <CardContent className="flex justify-between items-center gap-4">
+                    <div>
+                        <TriangleAlert color="orange" size={64}/>
+                    </div>
+                    <div>
+                        <CardTitle>Hmm. We were unable to find any track data at this url. Perhaps you made a typo?</CardTitle>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     )
 }

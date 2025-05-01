@@ -2,7 +2,9 @@
 
 import LinkForm from "@/components/linkform"
 import SetCard from "@/components/setcard"
+import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { getPlaylistURL, getSetData, populateTracks } from "@/lib/serverreq"
+import { TriangleAlert } from "lucide-react"
 
 export default async function SetPage({params}: any) {
     const { user, setid } = await params
@@ -40,6 +42,16 @@ export default async function SetPage({params}: any) {
     return (
         <div className="flex flex-col items-center p-4 gap-4">
             <LinkForm />
+            <Card className="shadow-md w-full max-w-screen-md">
+                <CardContent className="flex justify-between items-center gap-4">
+                    <div>
+                        <TriangleAlert color="orange" size={64}/>
+                    </div>
+                    <div>
+                        <CardTitle>Hmm. We were unable to find any playlist data at this url. Perhaps you made a typo?</CardTitle>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     )
 }

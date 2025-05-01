@@ -102,6 +102,10 @@ export async function getTrackData(url: string): Promise<Track | null> {
     
         const substr = html.substring(jsonStart, endIndex)
         const hydratables = JSON.parse(`[${substr}]`)
+        
+        if (hydratables[hydratables.length-1].hydratable != "sound") {
+            throw new Error('hydratable object does not contain sound')
+        }
 
         const track: Track = hydratables[hydratables.length-1].data
 
@@ -150,6 +154,10 @@ export async function getSetData(url: string): Promise<Set | null> {
     
         const substr = html.substring(jsonStart, endIndex)
         const hydratables = JSON.parse(`[${substr}]`)
+
+        if (hydratables[hydratables.length-1].hydratable != "playlist") {
+            throw new Error('hydratable object does not contain playlist')
+        }
 
         const set: Set = hydratables[hydratables.length-1].data
 
