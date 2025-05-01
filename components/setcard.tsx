@@ -14,7 +14,7 @@ import { Button } from "./ui/button"
 
 export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
     const [trackUrls, setTrackUrls] = useState<string[]>([])
-    const [archiveUrl, setArchiveUrl] = useState("")
+    const [archiveData, setArchiveData] = useState({url: "", size: 0})
 
     async function addSet() {
         const trackBuffers: Promise<ArrayBuffer>[] = []
@@ -36,7 +36,7 @@ export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
             type: "blob",
             compression: "DEFLATE"
         })
-        setArchiveUrl(URL.createObjectURL(zBlob))
+        setArchiveData({url: URL.createObjectURL(zBlob), size: zBlob.size})
     }
 
     useEffect(() => {
@@ -55,7 +55,17 @@ export default function SetCard(props: {set: Set, playlistURLs: string[]}) {
                         <h3 className="text-md font-semibold">{props.set.title}</h3>
                         <p className="text-xs text-muted-foreground">{props.set.user.username}</p>
                     </div>
-                    {archiveUrl === "" ? <Loader2 /> : <Button className="text-xs" asChild><a download={props.set.title + ".zip"} href={archiveUrl}><Download />.zip</a></Button>}
+                    {archiveData.url === "" ? <Loader2 /> :
+                        <div className="flex flex-col items-center gap-1">
+                            <Button size="sm" className="text-xs" asChild>
+                                <a download={props.set.title + ".zip"} href={archiveData.url}>
+                                    <Download />.zip
+                                </a>
+                            </Button>
+                            <span className="text-xs text-muted-foreground">
+                                {"(~" + Math.round((archiveData.size / 1024 / 1024) * 10) / 10 + " MB)"} 
+                            </span>
+                        </div>}
                 </CardContent>
             </Card>
             <CardContent className="flex flex-col justify-left items-left gap-2 p-2 px-4">
