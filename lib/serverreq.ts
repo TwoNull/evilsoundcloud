@@ -82,26 +82,6 @@ export async function getTrackData(url: string): Promise<Track | null> {
             },
         })
         const html = await response.text()
-
-        const versionTime = String(html.match(/<script>window\.__sc_version="[0-9]{10}"<\/script>/)![0].match(/[0-9]{10}/));
-
-        if (process.env.WEB_VERSIONTIME != versionTime) {
-            const scripts = html.matchAll(/<script.+src="(.+)">/g);
-
-            let clientid = "";
-            for (let script of scripts) {
-                const url = script[1];
-
-                const scrf = await fetch(url).then(r => r.text()).catch(() => {});
-                const id = scrf!.match(/\("client_id=[A-Za-z0-9]{32}"\)/);
-
-                if (id && typeof id[0] === 'string') {
-                    clientid = id[0].match(/[A-Za-z0-9]{32}/)![0];
-                    break;
-                }
-            }
-            await updateClientId(versionTime, clientid)
-        }
     
         const startMarker = 'window.__sc_hydration = ['
         const endMarker = '];'
@@ -154,26 +134,6 @@ export async function getSetData(url: string): Promise<Set | null> {
             },
         })
         const html = await response.text()
-
-        const versionTime = String(html.match(/<script>window\.__sc_version="[0-9]{10}"<\/script>/)![0].match(/[0-9]{10}/));
-
-        if (process.env.WEB_VERSIONTIME != versionTime) {
-            const scripts = html.matchAll(/<script.+src="(.+)">/g);
-
-            let clientid = "";
-            for (let script of scripts) {
-                const url = script[1];
-
-                const scrf = await fetch(url).then(r => r.text()).catch(() => {});
-                const id = scrf!.match(/\("client_id=[A-Za-z0-9]{32}"\)/);
-
-                if (id && typeof id[0] === 'string') {
-                    clientid = id[0].match(/[A-Za-z0-9]{32}/)![0];
-                    break;
-                }
-            }
-            await updateClientId(versionTime, clientid)
-        }
     
         const startMarker = 'window.__sc_hydration = ['
         const endMarker = '];'
@@ -203,30 +163,4 @@ export async function getSetData(url: string): Promise<Set | null> {
         console.log('error fetching or parsing set data:', error)
         return null
     }
-}
-
-async function updateClientId(versionTime: string, id: string) {
-    const res1 = fetch(`https://api.vercel.com/v10/projects/${process.env.PROJECT_NAME}/env/${process.env.WEB_CLIENTID_ID}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${process.env.VERCEL_TOKEN}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            value: id,
-            target: ['production'],
-        }),
-    });
-    const res2 = fetch(`https://api.vercel.com/v10/projects/${process.env.PROJECT_NAME}/env/${process.env.WEB_VERSIONID_ID}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `Bearer ${process.env.VERCEL_TOKEN}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            value: versionTime,
-            target: ['production'],
-        }),
-    });
-    await Promise.all([res1, res2])
 }
